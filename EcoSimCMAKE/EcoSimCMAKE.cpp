@@ -7,6 +7,6 @@ int main()
 {
 	std::cout << "Hello CMake." << std::endl;
 	Simulation cool;
-	std::cout << cool.cool(8);
+	std::cout << cool.cool(20);
 	return 0;
 }
