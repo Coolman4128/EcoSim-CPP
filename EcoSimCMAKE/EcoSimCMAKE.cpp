@@ -3,10 +3,10 @@
 
 #include "EcoSimCMAKE.h"
 #include "Simulation.h"
+#include "Pop.h"
 int main()
 {
-	std::cout << "Hello CMake." << std::endl;
-	Simulation cool;
-	std::cout << cool.cool(20);
+	Pop tyler;
+	std::cout << tyler.getPopID();
 	return 0;
 }
