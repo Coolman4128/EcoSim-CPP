@@ -1,9 +1,13 @@
 #include <iostream>
 #include <map>
+#include <list>
 #include "Depot.h"
+#include "Order.h"
 
 class Simulation;
 
+
+//This class represents a person in the simulation. It has a unique ID, a caste, a work location, money, needs, goods owned, and buy/sell orders.
 class Pop {
 private:
 	std::string popID;
@@ -12,6 +16,8 @@ private:
 	int money;
 	std::map<std::string, int> popNeeds;
 	std::map<std::string, int> goodsOwned;
+	std::list<Order*> sellOrders;
+	std::list<Order*> buyOrders;
 	Simulation* popSim;
 
 public:
@@ -22,8 +28,10 @@ public:
 	int provideNeeds();
 	bool checkNeeds();
 	void addGoods(std::string goodToAdd, int quantity);
-	void sellGood(std::string good, int quantity);
-	void buyGood(std::string good, int quantity);
+	int sellGood(std::string good, int quantity, int minPrice);
+	int buyGood(std::string good, int quantity, int maxPrice);
+	std::list<Order*>* getSellOrders();
+	std::list<Order*>* getBuyOrders();
 };
 
 

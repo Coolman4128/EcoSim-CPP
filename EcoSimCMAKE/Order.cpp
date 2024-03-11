@@ -1,9 +1,10 @@
 #include "Order.h"
 
-Order::Order(int quan, std::string goo, Pop* setOwner) {
+Order::Order(int quan, std::string goo, int setPrice, Pop* setOwner) {
 	quantity = quan;
 	good = goo;
 	owner = setOwner;
+	price = setPrice;
 }
 
 int Order::getQuantity() {

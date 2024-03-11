@@ -1,7 +1,9 @@
 #include <list>
 #include <iostream>
-#include "Order.h"
+#include "Pop.h"
 
+
+//This class is the main class of the simulation. It contains all the Pops, Depots, and Orders, and runs the simulation.
 class Simulation {
 
 private:
@@ -11,8 +13,8 @@ private:
 	std::list<Order*> buyOrders;
 
 public:
-	void addBuyOrder(int quantity, std::string good, Pop* owner);
-	void addSellOrder(int quantity, std::string good, Pop* owner);
+	void addBuyOrders();
+	void addSellOrders();
 	Pop* createNewPop(std::string popID, std::string caste, int money, Depot* setWorkLoc);
 	Depot* createNewDepot(std::string goodProduced);
 	void runTick();

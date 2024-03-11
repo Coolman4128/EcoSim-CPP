@@ -1,9 +1,11 @@
 #include <iostream>
-#include "Pop.h"
+
+class Pop;
 
 class Order {
 private:
 	int quantity;
+	int price;
 	std::string good;
 	Pop* owner;
 
@@ -12,5 +14,5 @@ public:
 	void setQuantity(int newQuantity);
 	std::string getGood();
 	Pop* getOwner();
-	Order(int quantity, std::string good, Pop* owner);
+	Order(int quantity, std::string good, int price, Pop* owner);
 };

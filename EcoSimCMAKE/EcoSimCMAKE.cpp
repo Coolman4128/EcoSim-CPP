@@ -9,5 +9,7 @@ int main()
 	Depot* cool = sim1.createNewDepot("food");
 	Pop* tylerPoint = sim1.createNewPop("tyler", "worker", 100, cool);
 	Pop* tylerPoint2 = sim1.createNewPop("tyler2", "worker", 100, cool);
+	
+
 	return 0;
 }
