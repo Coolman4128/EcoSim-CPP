@@ -20,7 +20,7 @@ std::string Pop::getPopCaste() {
 }
 
 //This is the constructor for the Pop class. It takes a unique ID, a caste, an amount of money, a pointer to the simulation, and a pointer to the work location.
-Pop::Pop(std::string popID1, std::string caste1, double money1, Simulation* simPoint, Depot* setWorkLoc) {
+Pop::Pop(std::string popID1, std::string caste1, double money1, Simulation* simPoint, Depot* setWorkLoc, Prices* simPrice) {
 	popID = popID1;
 	caste = caste1;
 	money = money1;
@@ -33,9 +33,7 @@ Pop::Pop(std::string popID1, std::string caste1, double money1, Simulation* simP
 	for (int i = 0; i < SIZE_OF_GOODS; i++) {
 		goodsOwned[GOODS[i]] = 0;
 	};
-	for (int i = 0; i < SIZE_OF_GOODS; i++) {
-		goodPrices[GOODS[i]] = 1;
-	};
+	goodPrices = simPrice;
 }
 
 //This function returns the production efficiency of the Pop. This is used to determine how much of a good the Pop will produce when it works.
@@ -70,18 +68,6 @@ double Pop::getMoney() {
 	return money;
 }
 
-
-
-//This function gets the price of the goods the Pop will sell or buy.
-double Pop::getPrice(std::string good) {
-	return goodPrices[good];
-}
-
-//This function sets the price of the goods the Pop will sell or buy.
-void Pop::setPrice(std::string good, double price) {
-	goodPrices[good] = price;
-}
-
 //This function provides the needs of the Pop. It checks if the Pop has enough of each good to satisfy its needs, satifies what it can and then updates the needs accordingly. 
 int Pop::provideNeeds() {
 	std::map<std::string, int>::iterator it;
@@ -91,7 +77,7 @@ int Pop::provideNeeds() {
 		if (goodsOwned[it->first] >= it->second) {
 			goodsOwned[it->first] = goodsOwned[it->first] - it->second;
 			popNeeds[it->first] = 0;
-			sellGood(it->first, goodsOwned[it->first], getPrice(it->first));
+			sellGood(it->first, goodsOwned[it->first], goodPrices->getPrice(it->first));
 			continue;
 		}
 		//if the pop has no need for the good, it does nothing.
@@ -101,8 +87,8 @@ int Pop::provideNeeds() {
 		//if the pop has some of the good, but not enough to satisfy its needs, it sells what it has and buys the rest.
 		else {
 			popNeeds[it->first] = popNeeds[it->first] - goodsOwned[it->first];
-			if (money >= getPrice(it->first) * popNeeds[it->first]) {
-				buyGood(it->first, popNeeds[it->first], getPrice(it->first));
+			if (money >= goodPrices->getPrice(it->first) * popNeeds[it->first]) {
+				buyGood(it->first, popNeeds[it->first], goodPrices->getPrice(it->first));
 			}
 			continue;
 		}

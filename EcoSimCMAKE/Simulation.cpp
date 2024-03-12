@@ -10,17 +10,17 @@ int SIZE_OF_NEEDS1 = 2;
 
 //This function creates a new Pop and adds it to the list of people in the simulation. It returns a pointer to the new Pop.
 Pop* Simulation::createNewPop(std::string popID, std::string caste, double money, Depot* setWorkLoc) {
-	Pop* createdPop = new Pop(popID, caste, money, this, setWorkLoc);
+	Pop* createdPop = new Pop(popID, caste, money, this, setWorkLoc, this->goodPrices);
 	people.insert(people.begin(), createdPop);
 	return createdPop;
 }
 
 Simulation::Simulation() {
 	for (int i = 0; i < SIZE_OF_NEEDS1; i++) {
-		goodPrices[GOODS1[i]] = 1.00;
 		goodSupply[GOODS1[i]] =	1;
 		goodDemand[GOODS1[i]] = 1;
 	};
+	goodPrices = new Prices(GOODS1, SIZE_OF_GOODS1);
 }
 
 //This function creates a new Depot and adds it to the list of depots in the simulation. It returns a pointer to the new Depot.
@@ -62,7 +62,6 @@ void Simulation::randomizePopOrder() {
 void Simulation::runTick() {
 	randomizePopOrder();
 	updateSimPrices();
-	updatePopPrices();
 	std::vector<Pop*>::iterator popIt;
 	std::vector<Order*>::iterator sellIt;
 	std::vector<Order*>::iterator buyIt;
@@ -218,22 +217,12 @@ int Simulation::returnOrders() {
 
 void Simulation::updateSimPrices() {
 	std::map<std::string, double>::iterator it;
-	for (auto it = goodPrices.begin(); it != goodPrices.end(); ++it) {
+	for (auto it = goodPrices->getPrices()->begin(); it != goodPrices->getPrices()->end(); ++it) {
 		std::cout << goodDemand[it->first] << std::endl;
 		std::cout << goodSupply[it->first] << std::endl;
 		std::cout << "coefficent is " << (goodDemand[it->first] + 1.0) / (goodSupply[it->first] + 1.0) << std::endl;
-		goodPrices[it->first] =   (goodPrices[it->first] * ((goodDemand[it->first] + 1.0) /(goodSupply[it->first] + 1.0)));
+		goodPrices->setPrice(it->first , (goodPrices->getPrice(it->first) * ((goodDemand[it->first] + 1.0) /(goodSupply[it->first] + 1.0))));
 	}
 
 }
 
-void Simulation::updatePopPrices() {
-	std::vector<Pop*>::iterator popIt;
-	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
-		Pop* currentPop = (*popIt);
-		std::map<std::string, int>::iterator it;
-		for (auto it = goodPrices.begin(); it != goodPrices.end(); ++it) {
-			currentPop->setPrice(it->first, it->second);
-		}
-	}
-}

@@ -16,7 +16,7 @@ private:
 	std::vector<Order*> buyOrders;
 	int fillOrders();
 	int returnOrders();
-	std::map<std::string, double> goodPrices;
+	Prices* goodPrices;
 	std::map<std::string, double> goodSupply;
 	std::map<std::string, double> goodDemand;
 
