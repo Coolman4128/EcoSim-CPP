@@ -5,6 +5,7 @@
 #include <vector>       
 #include <random>      
 #include <chrono>
+#include <cstdlib>
 
 //This class is the main class of the simulation. It contains all the Pops, Depots, and Orders, and runs the simulation.
 class Simulation {
@@ -18,6 +19,7 @@ private:
 	int fillOrders();
 	int returnOrders();
 	Prices* goodPrices;
+	int birthsToDo;
 	std::map<std::string, double> goodSupply;
 	std::map<std::string, double> goodDemand;
 

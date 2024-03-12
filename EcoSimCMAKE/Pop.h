@@ -22,6 +22,7 @@ private:
 	std::vector<Order*> buyOrders;
 	Simulation* popSim;
 	Prices* goodPrices;
+	bool dying;
 	bool fed;
 
 public:
@@ -32,6 +33,9 @@ public:
 	void work();
 	int provideNeeds();
 	bool checkNeeds();
+	void makeBuyDecision();
+	void makeSellDecision();
+	double getDayNeedsCost();
 	void addGoods(std::string goodToAdd, int quantity);
 	int sellGood(std::string good, int quantity, double minPrice);
 	int buyGood(std::string good, int quantity, double maxPrice);
@@ -42,6 +46,9 @@ public:
 	int getProductionEfficiency();
 	bool getFed();
 	void setFed(bool fed);
+	void setDying(bool dying);
+	bool getDying();
+	Depot* getWorkLoc();
 };
 
 

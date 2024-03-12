@@ -6,7 +6,7 @@ int SIZE_OF_NEEDS2 = 2;
 Needs::Needs(std::string needType) {
 	this->needType = needType;
 	for (int i = 0; i < SIZE_OF_NEEDS2; i++) {
-		popNeeds[NEEDS2[i]] = 1;
+		popNeeds[NEEDS2[i]] = 0;
 	}
 }
 

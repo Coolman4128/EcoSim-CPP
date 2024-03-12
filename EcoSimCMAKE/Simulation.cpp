@@ -22,6 +22,7 @@ Simulation::Simulation() {
 	};
 	goodPrices = new Prices(GOODS1, SIZE_OF_GOODS1);
 	tickCounter = 0;
+	birthsToDo = 0;
 }
 
 //This function creates a new Depot and adds it to the list of depots in the simulation. It returns a pointer to the new Depot.
@@ -77,30 +78,37 @@ void Simulation::runTick() {
 
 	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
 		Pop* currentPop = (*popIt);
+		int birthChance = std::rand() % 10;
+		if (birthChance == 5) {
+			birthsToDo++;
+		}
 		currentPop->work();
-	}
-
-	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
-		Pop* currentPop = (*popIt);
 		currentPop->provideNeeds();
+		currentPop->makeBuyDecision();
+		currentPop->makeSellDecision();
 	}
-
 	addBuyOrders();
 	addSellOrders();
 	findSupplyDemand();
 	fillOrders();
+	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
+		Pop* currentPop = (*popIt);
+		currentPop->provideNeeds();
+		currentPop->makeBuyDecision();
+		currentPop->makeSellDecision();
+	}
+	fillOrders();
 	returnOrders();
-
 	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
 		Pop* currentPop = (*popIt);
 		currentPop->provideNeeds();
 	}
-	returnOrders();
-
-
-
 	killStarvingPops(); 
 
+	for (int i = 0; i < birthsToDo; i++) {
+		createNewPop("newPop" + std::to_string(i) + "tick" + std::to_string(tickCounter), "poor", 300.00, depots[i % sizeof(depots) / sizeof(Depot*)]);
+	}
+	birthsToDo = 0;
 }
 
 
@@ -108,11 +116,20 @@ void Simulation::killStarvingPops() { //this function is set up in a way that ca
 	auto it = people.begin();
 	while (it != people.end()) {
 		if ((*it)->checkNeeds() != true) {
+			if ((*it)->getFed() == false) {
+				(*it)->setDying(true);
+			}
+			if ((*it)->getDying() == true) {
+				delete (*it);
+				it = people.erase(it);
+				continue;
+			}
 			(*it)->setFed(false);
 			++it;
 		}
 		else {
 			(*it)->setFed(true);
+			(*it)->setDying(false);
 			++it;  // go to next
 		}
 	}
@@ -230,7 +247,14 @@ void Simulation::updateSimPrices() {
 		std::cout << goodDemand[it->first] << std::endl;
 		std::cout << goodSupply[it->first] << std::endl;
 		std::cout << "coefficent is " << (goodDemand[it->first] + 1.0) / (goodSupply[it->first] + 1.0) << std::endl;
-		goodPrices->setPrice(it->first , (goodPrices->getPrice(it->first) * ((goodDemand[it->first] + 1.0) /(goodSupply[it->first] + 1.0))));
+		double coefficent = (goodDemand[it->first] + 1.0) / (goodSupply[it->first] + 1.0);
+		if (coefficent < .1) {
+			coefficent = .1;
+		}
+		else if (coefficent > 10) {
+			coefficent = 10;
+		}
+		goodPrices->setPrice(it->first , (goodPrices->getPrice(it->first) * coefficent));
 	}
 
 }

@@ -1,6 +1,9 @@
 #include "Pop.h"
 #define COST 1
-#define PRODUCTION 2
+#define PRODUCTION 1
+#define AVERAGE_COEFFICIENT .9
+#define SELLAVERAGECO 1.1
+#define MONEY_COEFFICIENT 1.1
 
 //This is the list of goods that the simulation will use. This can be expanded to include more goods.
 std::string GOODS[] = { "food", "coal" };
@@ -27,11 +30,16 @@ Pop::Pop(std::string popID1, std::string caste1, double money1, Simulation* simP
 	popSim = simPoint;
 	workLoc = setWorkLoc;
 	fed = true;
+	dying = false;
 	popNeeds = new Needs("life");
 	for (int i = 0; i < SIZE_OF_GOODS; i++) {
 		goodsOwned[GOODS[i]] = 0;
 	};
 	goodPrices = simPrice;
+}
+
+Depot* Pop::getWorkLoc() {
+	return workLoc;
 }
 
 //This function checks if the Pop has enough of each good to satisfy its needs. If it does, it returns true. If it does not, it returns false.
@@ -45,14 +53,22 @@ int Pop::getProductionEfficiency() {
 		return 1 * PRODUCTION;
 	}
 	else if (caste == "middle") {
-		return 2 * PRODUCTION;
+		return 4 * PRODUCTION;
 	}
 	else if (caste == "rich") {
-		return 3 * PRODUCTION;
+		return 5 * PRODUCTION;
 	}
 	else {
 		return 0;
 	}
+}
+
+void Pop::setDying(bool dying1) {
+	dying = dying1;
+}
+
+bool Pop::getDying() {
+	return dying;
 }
 
 //This function makes the Pop work. It adds XXX units of the good produced by the work location to the Pop's inventory.
@@ -95,12 +111,67 @@ int Pop::provideNeeds() {
 	return 1;
 }
 
+//This function makes a decision on what goods to buy. There are many conditions that would cause a pop to buy goods.
+void Pop::makeBuyDecision() {
+	
+	//If the pop has enough money to buy all the goods it needs, it will do so.
+	if (money >= getDayNeedsCost()) {
+		for (int i = 0; i < SIZE_OF_GOODS; i++) {
+			if (popNeeds->getNeeds(GOODS[i]) > 0) {
+				buyGood(GOODS[i], popNeeds->getNeeds(GOODS[i]), goodPrices->getPrice(GOODS[i]));
+			}
+		}
+	}
+	else {
+		//Buy as many goods as the pop can afford
+		for (int i = 0; i < SIZE_OF_GOODS; i++) {
+			if (popNeeds->getNeeds(GOODS[i]) > 0 && money > (popNeeds->getNeeds(GOODS[i]) * goodPrices->getPrice(GOODS[i]))) {
+				buyGood(GOODS[i], popNeeds->getNeeds(GOODS[i]), goodPrices->getPrice(GOODS[i]));
+			}
+		}
+		//Prevent pops with little money from wasting it by returning before the next conditions.
+		return;
+	}
+	//If the pop has enough money to buy all the goods it needs, it will then look for goods that are below the average price that it needs and can afford and buys them.
+	for (int i = 0; i < SIZE_OF_GOODS; i++) {
+		std::string* needFinder = std::find(NEEDS, NEEDS + SIZE_OF_NEEDS, GOODS[i]);
+		bool goodIsNeeded = needFinder != NEEDS + SIZE_OF_NEEDS;
+		if (goodIsNeeded && goodPrices->getPrice(GOODS[i]) < (goodPrices->getAveragePrice(GOODS[i]) * AVERAGE_COEFFICIENT) && money >= goodPrices->getPrice(GOODS[i]) * MONEY_COEFFICIENT) {
+			buyGood(GOODS[i], 1, goodPrices->getPrice(GOODS[i]));
+		}
+	}
+
+}
+
+void Pop::makeSellDecision() {
+	//If the pop isnt fed, or there is a good with a higher than average price then it will sell any extra it has. 
+	for (int i = 0; i < SIZE_OF_GOODS; i++) {
+		if (popNeeds->getNeeds(GOODS[i]) == 0 && goodsOwned[GOODS[i]] > 0 && (!fed || goodPrices->getPrice(GOODS[i]) > goodPrices->getAveragePrice(GOODS[i]) * SELLAVERAGECO)) {
+			sellGood(GOODS[i], goodsOwned[GOODS[i]], goodPrices->getPrice(GOODS[i]));
+		}
+	}
+}
 bool Pop::getFed() {
 	return fed;
 }
 
 void Pop::setFed(bool fed1) {
 	fed = fed1;
+}
+
+double Pop::getDayNeedsCost() {
+	double cost = 0;
+	if (popNeeds->checkNeeds() == true) {
+		return 0;
+	}
+	std::map<std::string, int>::iterator it;
+	for (auto it = popNeeds->getNeedsMap()->begin(); it != popNeeds->getNeedsMap()->end(); ++it)
+	{
+		if (it->second > 0) {
+			cost = cost + (it->second * goodPrices->getPrice(it->first));
+		}
+	}
+	return cost;
 }
 
 //This function adds a good to the Pop's inventory.
