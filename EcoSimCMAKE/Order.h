@@ -11,6 +11,7 @@ private:
 
 public:
 	int getQuantity();
+	int getPrice();
 	void setQuantity(int newQuantity);
 	std::string getGood();
 	Pop* getOwner();

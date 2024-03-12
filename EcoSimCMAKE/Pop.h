@@ -1,6 +1,6 @@
 #include <iostream>
 #include <map>
-#include <list>
+#include <vector>
 #include "Depot.h"
 #include "Order.h"
 
@@ -16,22 +16,25 @@ private:
 	int money;
 	std::map<std::string, int> popNeeds;
 	std::map<std::string, int> goodsOwned;
-	std::list<Order*> sellOrders;
-	std::list<Order*> buyOrders;
+	std::vector<Order*> sellOrders;
+	std::vector<Order*> buyOrders;
 	Simulation* popSim;
 
 public:
 	Pop(std::string popID, std::string caste, int money, Simulation* sim, Depot* setWorkLoc);
 	std::string getPopID();
 	std::string getPopCaste();
+	int getMoney();
 	void work();
 	int provideNeeds();
 	bool checkNeeds();
 	void addGoods(std::string goodToAdd, int quantity);
 	int sellGood(std::string good, int quantity, int minPrice);
 	int buyGood(std::string good, int quantity, int maxPrice);
-	std::list<Order*>* getSellOrders();
-	std::list<Order*>* getBuyOrders();
+	std::vector<Order*>* getSellOrders();
+	std::vector<Order*>* getBuyOrders();
+	void updateDailyNeeds();
+	void addMoney(int moneyToAdd);
 };
 
 

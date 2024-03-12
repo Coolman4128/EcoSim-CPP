@@ -20,3 +20,7 @@ void Order::setQuantity(int newQuantity) {
 Pop* Order::getOwner() {
 	return owner;
 }
+
+int Order::getPrice() {
+	return price;
+}
