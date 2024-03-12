@@ -1,8 +1,8 @@
 #include "Pop.h"
 #define COST 1
-#define PRODUCTION 1
-#define AVERAGE_COEFFICIENT .9
-#define SELLAVERAGECO 1.1
+#define PRODUCTION 2
+#define AVERAGE_COEFFICIENT 1
+#define SELLAVERAGECO 1
 #define MONEY_COEFFICIENT 1.1
 
 //This is the list of goods that the simulation will use. This can be expanded to include more goods.
@@ -53,7 +53,7 @@ int Pop::getProductionEfficiency() {
 		return 1 * PRODUCTION;
 	}
 	else if (caste == "middle") {
-		return 4 * PRODUCTION;
+		return 2 * PRODUCTION;
 	}
 	else if (caste == "rich") {
 		return 5 * PRODUCTION;
@@ -146,8 +146,19 @@ void Pop::makeBuyDecision() {
 void Pop::makeSellDecision() {
 	//If the pop isnt fed, or there is a good with a higher than average price then it will sell any extra it has. 
 	for (int i = 0; i < SIZE_OF_GOODS; i++) {
-		if (popNeeds->getNeeds(GOODS[i]) == 0 && goodsOwned[GOODS[i]] > 0 && (!fed || goodPrices->getPrice(GOODS[i]) > goodPrices->getAveragePrice(GOODS[i]) * SELLAVERAGECO)) {
-			sellGood(GOODS[i], goodsOwned[GOODS[i]], goodPrices->getPrice(GOODS[i]));
+		if (popNeeds->getNeeds(GOODS[i]) == 0 && goodsOwned[GOODS[i]] > 0 && (money <= getDayNeedsCost()*2 || goodPrices->getPrice(GOODS[i]) > goodPrices->getAveragePrice(GOODS[i]) * SELLAVERAGECO)) {
+			//CHANGE hoy many goods to sell to either be 1 or how ever many will pay for tommorows needs. 
+			int goodsToSell = 0;
+			if (!fed) {
+				goodsToSell = goodsOwned[GOODS[i]];
+			}
+			else if (goodsOwned[GOODS[i]] > 1) {
+				goodsToSell = 2;
+			}
+			else {
+				goodsToSell = 1;
+			}
+			sellGood(GOODS[i], goodsToSell, goodPrices->getPrice(GOODS[i]));
 		}
 	}
 }

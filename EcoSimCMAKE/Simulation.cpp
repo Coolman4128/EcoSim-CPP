@@ -66,7 +66,7 @@ void Simulation::runTick() {
 	std::vector<Order*>::iterator sellIt;
 	std::vector<Order*>::iterator buyIt;
 	tickCounter++;
-	if (tickCounter % 10 == 0) {
+	if (tickCounter % 2 == 0) {
 		for (int i = 0; i < SIZE_OF_GOODS1; i++) {
 			goodPrices->updatePriceAverage(GOODS1[i]);
 		};
@@ -75,6 +75,7 @@ void Simulation::runTick() {
 	updateSimPrices();
 	printPopWealth();
 	printPopCount();
+	printNeedlessPops();
 
 	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
 		Pop* currentPop = (*popIt);
@@ -106,7 +107,7 @@ void Simulation::runTick() {
 	killStarvingPops(); 
 
 	for (int i = 0; i < birthsToDo; i++) {
-		createNewPop("newPop" + std::to_string(i) + "tick" + std::to_string(tickCounter), "poor", 300.00, depots[i % sizeof(depots) / sizeof(Depot*)]);
+		//createNewPop("newPop" + std::to_string(i) + "tick" + std::to_string(tickCounter), "poor", 3.00, depots[i % sizeof(depots) / sizeof(Depot*)]);
 	}
 	birthsToDo = 0;
 }
@@ -147,7 +148,18 @@ void Simulation::printPopWealth() {
 
 //This function prints how many pops are in the simulation.
 void Simulation::printPopCount() {
-	std::cout << people.size() << std::endl;
+	std::cout << "There are "  << people.size() << " people alive" << std::endl;
+}
+void Simulation::printNeedlessPops() {
+	int counter = 0;
+	std::vector<Pop*>::iterator popIt;
+	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
+		Pop* currentPop = (*popIt);
+		if (currentPop->checkNeeds() == true) {
+			counter++;
+		}
+	}
+	std::cout << "There are " << counter << " people who have all their needs met" << std::endl;
 }
 
 void Simulation::printOrderCount(){
