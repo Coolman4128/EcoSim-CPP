@@ -1,6 +1,6 @@
 #include "Order.h"
 
-Order::Order(int quan, std::string goo, int setPrice, Pop* setOwner) {
+Order::Order(int quan, std::string goo, double setPrice, Pop* setOwner) {
 	quantity = quan;
 	good = goo;
 	owner = setOwner;
@@ -21,6 +21,6 @@ Pop* Order::getOwner() {
 	return owner;
 }
 
-int Order::getPrice() {
+double Order::getPrice() {
 	return price;
 }

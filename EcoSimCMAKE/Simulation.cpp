@@ -1,12 +1,26 @@
 #include "Simulation.h"
 #include <iostream>
 
+//This is the list of goods that the simulation will use. This can be expanded to include more goods.
+std::string GOODS1[] = { "food", "coal" };
+std::string NEEDS1[] = { "food", "coal" };
+int SIZE_OF_GOODS1 = 2;
+int SIZE_OF_NEEDS1 = 2;
+
 
 //This function creates a new Pop and adds it to the list of people in the simulation. It returns a pointer to the new Pop.
-Pop* Simulation::createNewPop(std::string popID, std::string caste, int money, Depot* setWorkLoc) {
+Pop* Simulation::createNewPop(std::string popID, std::string caste, double money, Depot* setWorkLoc) {
 	Pop* createdPop = new Pop(popID, caste, money, this, setWorkLoc);
 	people.insert(people.begin(), createdPop);
 	return createdPop;
+}
+
+Simulation::Simulation() {
+	for (int i = 0; i < SIZE_OF_NEEDS1; i++) {
+		goodPrices[GOODS1[i]] = 1.00;
+		goodSupply[GOODS1[i]] =	1;
+		goodDemand[GOODS1[i]] = 1;
+	};
 }
 
 //This function creates a new Depot and adds it to the list of depots in the simulation. It returns a pointer to the new Depot.
@@ -47,6 +61,8 @@ void Simulation::randomizePopOrder() {
 
 void Simulation::runTick() {
 	randomizePopOrder();
+	updateSimPrices();
+	updatePopPrices();
 	std::vector<Pop*>::iterator popIt;
 	std::vector<Order*>::iterator sellIt;
 	std::vector<Order*>::iterator buyIt;
@@ -65,6 +81,7 @@ void Simulation::runTick() {
 
 	addBuyOrders();
 	addSellOrders();
+	findSupplyDemand();
 	fillOrders();
 	returnOrders();
 
@@ -74,18 +91,22 @@ void Simulation::runTick() {
 	}
 	returnOrders();
 
-	killStarvingPops();
+
+
+	killStarvingPops(); 
 
 }
 
 
-void Simulation::killStarvingPops() {
+void Simulation::killStarvingPops() { //this function is set up in a way that can be changed to kill the poops, but for now it just sets them to unfed.
 	auto it = people.begin();
 	while (it != people.end()) {
 		if ((*it)->checkNeeds() != true) {
-			it = people.erase(it);// erase and go to next
+			(*it)->setFed(false);
+			++it;
 		}
 		else {
+			(*it)->setFed(true);
 			++it;  // go to next
 		}
 	}
@@ -110,6 +131,31 @@ void Simulation::printOrderCount(){
 	std::cout << buyOrders.size() << std::endl;
 	std::cout << sellOrders.size() << std::endl;
 }
+
+void Simulation::findSupplyDemand() {
+	std::vector<Order*>::iterator sellIt;
+	std::vector<Order*>::iterator buyIt;
+	std::map<std::string, double>::iterator goodIt;
+	for (auto goodIt = goodSupply.begin(); goodIt != goodSupply.end(); ++goodIt) {
+		goodSupply[goodIt->first] = 0;
+		for (auto sellIt = sellOrders.begin(); sellIt != sellOrders.end(); ++sellIt) {
+			Order* currentSellOrder = (*sellIt);
+			if (currentSellOrder->getGood() == goodIt->first) {
+				goodSupply[goodIt->first] = goodSupply[goodIt->first] + currentSellOrder->getQuantity();
+			}
+		}
+	}
+	for (auto goodIt = goodDemand.begin(); goodIt != goodDemand.end(); ++goodIt) {
+		goodDemand[goodIt->first] = 0;
+		for (auto buyIt = buyOrders.begin(); buyIt != buyOrders.end(); ++buyIt) {
+			Order* currentBuyOrder = (*buyIt);
+			if (currentBuyOrder->getGood() == goodIt->first) {
+				goodDemand[goodIt->first] = goodDemand[goodIt->first] + currentBuyOrder->getQuantity();
+			}
+		}
+	}
+}
+
 
 //This function runs through the orders and trys to fill as many as possible. It removes the orders that are filled from the vector of orders.
 int Simulation::fillOrders() {
@@ -168,4 +214,26 @@ int Simulation::returnOrders() {
 	}
 	buyOrders.clear();
 	return 0;
+}
+
+void Simulation::updateSimPrices() {
+	std::map<std::string, double>::iterator it;
+	for (auto it = goodPrices.begin(); it != goodPrices.end(); ++it) {
+		std::cout << goodDemand[it->first] << std::endl;
+		std::cout << goodSupply[it->first] << std::endl;
+		std::cout << "coefficent is " << (goodDemand[it->first] + 1.0) / (goodSupply[it->first] + 1.0) << std::endl;
+		goodPrices[it->first] =   (goodPrices[it->first] * ((goodDemand[it->first] + 1.0) /(goodSupply[it->first] + 1.0)));
+	}
+
+}
+
+void Simulation::updatePopPrices() {
+	std::vector<Pop*>::iterator popIt;
+	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
+		Pop* currentPop = (*popIt);
+		std::map<std::string, int>::iterator it;
+		for (auto it = goodPrices.begin(); it != goodPrices.end(); ++it) {
+			currentPop->setPrice(it->first, it->second);
+		}
+	}
 }

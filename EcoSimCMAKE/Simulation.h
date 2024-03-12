@@ -16,11 +16,15 @@ private:
 	std::vector<Order*> buyOrders;
 	int fillOrders();
 	int returnOrders();
+	std::map<std::string, double> goodPrices;
+	std::map<std::string, double> goodSupply;
+	std::map<std::string, double> goodDemand;
 
 public:
+	Simulation();
 	void addBuyOrders();
 	void addSellOrders();
-	Pop* createNewPop(std::string popID, std::string caste, int money, Depot* setWorkLoc);
+	Pop* createNewPop(std::string popID, std::string caste, double money, Depot* setWorkLoc);
 	Depot* createNewDepot(std::string goodProduced);
 	void runTick();
 	void printPopWealth();
@@ -28,5 +32,10 @@ public:
 	void printOrderCount();
 	void killStarvingPops();
 	void randomizePopOrder();
+	void updatePopPrices();
+	void updateSimPrices();
+	double getGoodSupply(std::string good);
+	double getGoodDemand(std::string good);
+	void findSupplyDemand();
 
 };

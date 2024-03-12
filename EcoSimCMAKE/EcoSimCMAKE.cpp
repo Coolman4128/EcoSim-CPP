@@ -10,13 +10,19 @@ int main()
 	Depot* cool2 = sim1.createNewDepot("coal");
 
 
-	for (int i = 0; i < 300; i++) {
-		sim1.createNewPop("tyler" + std::to_string(i), "worker", 3, cool);
+	for (int i = 0; i < 20; i++) {
+		sim1.createNewPop("tyler" + std::to_string(i), "poor", 300.00, cool);
 	}
-	for (int i = 0; i < 100; i++) {
-		sim1.createNewPop("lindsey" + std::to_string(i), "worker", 3, cool2);
+	for (int i = 0; i < 20; i++) {
+		sim1.createNewPop("lindsey" + std::to_string(i), "poor", 300.00, cool2);
 	}
-	for (int i = 0; i < 5000; i++) {
+	for (int i = 0; i < 10; i++) {
+		sim1.createNewPop("luke" + std::to_string(i), "middle", 300.00, cool);
+	}
+	for (int i = 0; i < 10; i++) {
+		sim1.createNewPop("lauren" + std::to_string(i), "middle", 300.00, cool2);
+	}
+	for (int i = 0; i < 50; i++) {
 		sim1.runTick();
 	}
 
