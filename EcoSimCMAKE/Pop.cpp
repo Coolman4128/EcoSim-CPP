@@ -27,13 +27,16 @@ Pop::Pop(std::string popID1, std::string caste1, double money1, Simulation* simP
 	popSim = simPoint;
 	workLoc = setWorkLoc;
 	fed = true;
-	for(int i = 0; i < SIZE_OF_GOODS; i++) {
-		popNeeds[GOODS[i]] = 0;
-	}
+	popNeeds = new Needs("life");
 	for (int i = 0; i < SIZE_OF_GOODS; i++) {
 		goodsOwned[GOODS[i]] = 0;
 	};
 	goodPrices = simPrice;
+}
+
+//This function checks if the Pop has enough of each good to satisfy its needs. If it does, it returns true. If it does not, it returns false.
+bool Pop::checkNeeds() {
+	return popNeeds->checkNeeds();
 }
 
 //This function returns the production efficiency of the Pop. This is used to determine how much of a good the Pop will produce when it works.
@@ -71,25 +74,21 @@ double Pop::getMoney() {
 //This function provides the needs of the Pop. It checks if the Pop has enough of each good to satisfy its needs, satifies what it can and then updates the needs accordingly. 
 int Pop::provideNeeds() {
 	std::map<std::string, int>::iterator it;
-	for (auto it = popNeeds.begin(); it != popNeeds.end(); ++it)
+	for (auto it = popNeeds->getNeedsMap()->begin(); it != popNeeds->getNeedsMap()->end(); ++it)
 	{
-		//if the pop has enough of the good to satisfy its needs, it does so and updates the needs accordingly, then sells the excess.
+		//if the pop has enough of the good to satisfy its needs, it does so and updates the needs accordingly.
 		if (goodsOwned[it->first] >= it->second) {
 			goodsOwned[it->first] = goodsOwned[it->first] - it->second;
-			popNeeds[it->first] = 0;
-			sellGood(it->first, goodsOwned[it->first], goodPrices->getPrice(it->first));
+			popNeeds->setNeeds(it->first, 0);
 			continue;
 		}
-		//if the pop has no need for the good, it does nothing.
+		//if the pop has no need for the good, it does nothing.	
 		else if(it->second == 0) {
 			continue;
 		}
-		//if the pop has some of the good, but not enough to satisfy its needs, it sells what it has and buys the rest.
+		//if the pop has some of the good, but not enough to satisfy its needs, it fullfills what it can.
 		else {
-			popNeeds[it->first] = popNeeds[it->first] - goodsOwned[it->first];
-			if (money >= goodPrices->getPrice(it->first) * popNeeds[it->first]) {
-				buyGood(it->first, popNeeds[it->first], goodPrices->getPrice(it->first));
-			}
+			popNeeds->setNeeds(it->first, popNeeds->getNeeds(it->first) - goodsOwned[it->first]);
 			continue;
 		}
 	}
@@ -102,20 +101,6 @@ bool Pop::getFed() {
 
 void Pop::setFed(bool fed1) {
 	fed = fed1;
-}
-
-//This function tells if the Pop has any needs.
-bool Pop::checkNeeds() {
-	std::map<std::string, int>::iterator it;
-	for (auto it = popNeeds.begin(); it != popNeeds.end(); ++it) {
-		if (it->second == 0) {
-			continue;
-		}
-		else {
-			return false;
-		}
-	}
-	return true;
 }
 
 //This function adds a good to the Pop's inventory.
@@ -154,7 +139,7 @@ std::vector<Order*>* Pop::getBuyOrders() {
 //This function updates the Pop's needs.
 void Pop::updateDailyNeeds(){
 	for (int i = 0; i < SIZE_OF_NEEDS; i++) {
-		popNeeds[NEEDS[i]] = popNeeds[NEEDS[i]] + 1;
+		popNeeds->setNeeds(NEEDS[i], popNeeds->getNeeds(NEEDS[i]) + 1);
 	}
 }
 

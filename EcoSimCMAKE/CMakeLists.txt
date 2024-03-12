@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (EcoSimCMAKE "EcoSimCMAKE.cpp" "EcoSimCMAKE.h" "Simulation.h" "Simulation.cpp" "Pop.h" "Pop.cpp" "Order.cpp" "Depot.h" "Depot.cpp" "Prices.h" "Prices.cpp")
+add_executable (EcoSimCMAKE "EcoSimCMAKE.cpp" "EcoSimCMAKE.h" "Simulation.h" "Simulation.cpp" "Pop.h" "Pop.cpp" "Order.cpp" "Depot.h" "Depot.cpp" "Prices.h" "Prices.cpp" "Needs.h" "Needs.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET EcoSimCMAKE PROPERTY CXX_STANDARD 20)

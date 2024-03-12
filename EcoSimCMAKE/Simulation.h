@@ -10,6 +10,7 @@
 class Simulation {
 
 private:
+	int tickCounter;
 	std::vector<Pop*> people;
 	std::vector<Depot*> depots;
 	std::vector<Order*> sellOrders;
@@ -32,7 +33,6 @@ public:
 	void printOrderCount();
 	void killStarvingPops();
 	void randomizePopOrder();
-	void updatePopPrices();
 	void updateSimPrices();
 	double getGoodSupply(std::string good);
 	double getGoodDemand(std::string good);

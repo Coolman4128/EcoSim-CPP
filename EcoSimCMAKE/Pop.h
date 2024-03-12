@@ -4,6 +4,7 @@
 #include "Depot.h"
 #include "Prices.h"
 #include "Order.h"
+#include "Needs.h"
 
 class Simulation;
 
@@ -15,7 +16,7 @@ private:
 	std::string caste;
 	Depot* workLoc;
 	double money;
-	std::map<std::string, int> popNeeds;
+	Needs* popNeeds;
 	std::map<std::string, int> goodsOwned;
 	std::vector<Order*> sellOrders;
 	std::vector<Order*> buyOrders;

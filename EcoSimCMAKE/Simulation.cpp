@@ -16,11 +16,12 @@ Pop* Simulation::createNewPop(std::string popID, std::string caste, double money
 }
 
 Simulation::Simulation() {
-	for (int i = 0; i < SIZE_OF_NEEDS1; i++) {
+	for (int i = 0; i < SIZE_OF_GOODS1; i++) {
 		goodSupply[GOODS1[i]] =	1;
 		goodDemand[GOODS1[i]] = 1;
 	};
 	goodPrices = new Prices(GOODS1, SIZE_OF_GOODS1);
+	tickCounter = 0;
 }
 
 //This function creates a new Depot and adds it to the list of depots in the simulation. It returns a pointer to the new Depot.
@@ -60,11 +61,17 @@ void Simulation::randomizePopOrder() {
 //All the Pops wun through their tasks, sell/buy goods, take care of needs, etc.
 
 void Simulation::runTick() {
-	randomizePopOrder();
-	updateSimPrices();
 	std::vector<Pop*>::iterator popIt;
 	std::vector<Order*>::iterator sellIt;
 	std::vector<Order*>::iterator buyIt;
+	tickCounter++;
+	if (tickCounter % 10 == 0) {
+		for (int i = 0; i < SIZE_OF_GOODS1; i++) {
+			goodPrices->updatePriceAverage(GOODS1[i]);
+		};
+	}
+	randomizePopOrder();
+	updateSimPrices();
 	printPopWealth();
 	printPopCount();
 
