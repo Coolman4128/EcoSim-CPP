@@ -22,7 +22,7 @@ int main()
 	for (int i = 0; i < 10; i++) {
 		sim1.createNewPop("lauren" + std::to_string(i), "middle", 300.00, cool2);
 	}
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 500; i++) {
 		sim1.runTick();
 	}
 

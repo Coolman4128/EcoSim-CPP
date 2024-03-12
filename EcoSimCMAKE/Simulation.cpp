@@ -205,11 +205,13 @@ int Simulation::returnOrders() {
 	for (auto sellIt = sellOrders.begin(); sellIt != sellOrders.end(); ++sellIt) {
 		currentSellOrder = *(sellIt);
 		currentSellOrder->getOwner()->addGoods(currentSellOrder->getGood(), currentSellOrder->getQuantity());
+		delete currentSellOrder;
 	}
 	sellOrders.clear();
 	for (auto buyIt = buyOrders.begin(); buyIt != buyOrders.end(); ++buyIt) {
 		currentBuyOrder = *(buyIt);
 		currentBuyOrder->getOwner()->addMoney(currentBuyOrder->getQuantity() * currentBuyOrder->getPrice());
+		delete currentBuyOrder;
 	}
 	buyOrders.clear();
 	return 0;
