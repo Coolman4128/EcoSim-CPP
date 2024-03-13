@@ -234,6 +234,7 @@ void Pop::updateDailyNeeds(){
 	}
 }
 
+
 //This function adds money to the Pop's inventory.
 void Pop::addMoney(double moneytoAdd) {
 	money = money + moneytoAdd;
