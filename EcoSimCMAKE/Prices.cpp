@@ -4,8 +4,8 @@
 //This is the constructor for the Prices class. It sets the initial prices of the goods.
 Prices::Prices(std::string goods[], int goodslength) {
 	for (int i = 0; i < goodslength; i++) {
-		goodPrices[goods[i]] = 1;
-		priceHistory[goods[i]][0] = 1;
+		goodPrices[goods[i]] = 5;
+		priceHistory[goods[i]][0] = 5;
 		priceHistory[goods[i]][1] = 1;
 	}
 }

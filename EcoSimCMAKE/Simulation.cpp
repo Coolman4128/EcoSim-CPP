@@ -66,7 +66,7 @@ void Simulation::runTick() {
 	std::vector<Order*>::iterator sellIt;
 	std::vector<Order*>::iterator buyIt;
 	tickCounter++;
-	if (tickCounter % 2 == 0) {
+	if (tickCounter % 1 == 0) {
 		for (int i = 0; i < SIZE_OF_GOODS1; i++) {
 			goodPrices->updatePriceAverage(GOODS1[i]);
 		};
@@ -104,7 +104,7 @@ void Simulation::runTick() {
 		Pop* currentPop = (*popIt);
 		currentPop->provideNeeds();
 	}
-	killStarvingPops(); 
+	//killStarvingPops(); 
 
 	for (int i = 0; i < birthsToDo; i++) {
 		//createNewPop("newPop" + std::to_string(i) + "tick" + std::to_string(tickCounter), "poor", 3.00, depots[i % sizeof(depots) / sizeof(Depot*)]);
@@ -121,8 +121,8 @@ void Simulation::killStarvingPops() { //this function is set up in a way that ca
 				(*it)->setDying(true);
 			}
 			if ((*it)->getDying() == true) {
-				delete (*it);
-				it = people.erase(it);
+				//delete (*it);
+				//it = people.erase(it);
 				continue;
 			}
 			(*it)->setFed(false);
@@ -210,17 +210,17 @@ int Simulation::fillOrders() {
 			}
 			else if (currentSellOrder->getGood() == currentBuyOrder->getGood() && currentSellOrder->getQuantity() >= currentBuyOrder->getQuantity()) {
 				currentBuyOrder->getOwner()->addGoods(currentSellOrder->getGood(), currentBuyOrder->getQuantity());
-				currentSellOrder->getOwner()->addMoney(currentBuyOrder->getQuantity() * currentBuyOrder->getPrice());
+				currentSellOrder->getOwner()->addMoney(currentBuyOrder->getQuantity() * currentSellOrder->getPrice());
 				currentSellOrder->setQuantity(currentSellOrder->getQuantity() - currentBuyOrder->getQuantity());
-				std::cout << currentSellOrder->getOwner()->getPopID() << "sold " << currentBuyOrder->getQuantity() << " " << currentBuyOrder->getGood() << " to " << currentBuyOrder->getOwner()->getPopID() << " for " << currentBuyOrder->getPrice() << std::endl;
+				std::cout << currentSellOrder->getOwner()->getPopID() << "sold " << currentBuyOrder->getQuantity() << " " << currentBuyOrder->getGood() << " to " << currentBuyOrder->getOwner()->getPopID() << " for " << currentSellOrder->getPrice() << std::endl;
 				currentBuyOrder->setQuantity(0);
 				continue;
 			}
 			else if (currentSellOrder->getGood() == currentBuyOrder->getGood() && currentSellOrder->getQuantity() < currentBuyOrder->getQuantity()) {
 				currentBuyOrder->getOwner()->addGoods(currentSellOrder->getGood(), currentSellOrder->getQuantity());
-				currentSellOrder->getOwner()->addMoney(currentSellOrder->getQuantity() * currentBuyOrder->getPrice());
+				currentSellOrder->getOwner()->addMoney(currentSellOrder->getQuantity() * currentSellOrder->getPrice());
 				currentBuyOrder->setQuantity(currentBuyOrder->getQuantity() - currentSellOrder->getQuantity());
-				std::cout << currentSellOrder->getOwner()->getPopID() << "sold " << currentBuyOrder->getQuantity() << " " << currentBuyOrder->getGood() << " to " << currentBuyOrder->getOwner()->getPopID() << " for " << currentBuyOrder->getPrice() << std::endl;
+				std::cout << currentSellOrder->getOwner()->getPopID() << "sold " << currentBuyOrder->getQuantity() << " " << currentBuyOrder->getGood() << " to " << currentBuyOrder->getOwner()->getPopID() << " for " << currentSellOrder->getPrice() << std::endl;
 				currentSellOrder->setQuantity(0);
 				break;
 			}

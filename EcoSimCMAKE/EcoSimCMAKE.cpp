@@ -11,17 +11,18 @@ int main()
 
 
 	for (int i = 0; i < 50; i++) {
-		sim1.createNewPop("tyler" + std::to_string(i), "poor", 3.00, cool);
+		sim1.createNewPop("tyler" + std::to_string(i), "poor", 30.00, cool);
 	}
 	for (int i = 0; i < 50; i++) {
-		sim1.createNewPop("lindsey" + std::to_string(i), "poor", 3.00, cool2);
+		sim1.createNewPop("lindsey" + std::to_string(i), "poor", 30.00, cool2);
+	}/*
+	for (int i = 0; i < 20; i++) {
+		sim1.createNewPop("luke" + std::to_string(i), "middle", 30.00, cool);
 	}
 	for (int i = 0; i < 20; i++) {
-		sim1.createNewPop("luke" + std::to_string(i), "middle", 3.00, cool);
+		sim1.createNewPop("lauren" + std::to_string(i), "middle", 30.00, cool2);
 	}
-	for (int i = 0; i < 20; i++) {
-		sim1.createNewPop("lauren" + std::to_string(i), "middle", 3.00, cool2);
-	}
+	*/
 	for (int i = 0; i < 50; i++) {
 		sim1.runTick();
 	}
