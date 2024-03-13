@@ -3,6 +3,10 @@
 #include <string>
 #include "EcoSimCMAKE.h"
 #include "Simulation.h"
+#include <fstream>
+
+#define PATH "C:/Users/Tyler Watson/source/repos/EcoSimCMAKE/dataout/popInfo.csv"
+
 int main()
 {
 	Simulation sim1;
@@ -23,8 +27,15 @@ int main()
 		sim1.createNewPop("lauren" + std::to_string(i), "middle", 30.00, cool2);
 	}
 	*/
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 3; i++) {
 		sim1.runTick();
+		std::ofstream popInfoFile;
+		popInfoFile.open(PATH, std::ios::in | std::ios::out | std::ios::trunc);
+		std::cout << popInfoFile.is_open() << "poop";
+		if (popInfoFile.is_open()) {
+			popInfoFile << sim1.getPopInfo();
+			popInfoFile.close();
+		}
 	}
 
 	return 0;

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/matplotlib-cpp-x86-windows-2020-08-27#2-81481545-287f-45cd-bd01-02d192f1a58d",
+  "name": "matplotlib-cpp:x86-windows@2020-08-27#2 bc9579ea194e2fbd1ecc7312424bd104cdfcb3f837f2f964023a3b1567e2473d",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-f19f3d9939100085fe2f7e41502d60b08e2083b6"
+    ],
+    "created": "2024-03-13T00:16:44Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "DEPENDENCY_MANIFEST_OF",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "matplotlib-cpp",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "2020-08-27#2",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@e6daa977bec3896a8b102b44aaf1918778412e8a",
+      "homepage": "https://github.com/lava/matplotlib-cpp",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Extremely simple yet powerful header-only C++ plotting library built on the popular matplotlib",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "matplotlib-cpp:x86-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "bc9579ea194e2fbd1ecc7312424bd104cdfcb3f837f2f964023a3b1567e2473d",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "lava/matplotlib-cpp",
+      "downloadLocation": "git+https://github.com/lava/matplotlib-cpp@70d508fcb7febc66535ba923eac1b1a4e571e4d1",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "4da452fc38b6c349a1b08b97775ef2d90354fabd3c8c3a0383f08609b22dea222b7f3e091efc1b833755f6b5c1e8564e675d2ed54cdc21f8b07b1b7bb44a82f4"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "247bbc4281083080d8c6983c876df39b02b9ac961c7ed7ed16f22bfdf9d85b93"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./vcpkg.json",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "04c92628702054895c0186115c269db2b66ef35e187df9d2ddd4020ccc9fa69b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

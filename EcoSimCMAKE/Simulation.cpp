@@ -58,6 +58,17 @@ void Simulation::randomizePopOrder() {
 	std::shuffle(people.begin(), people.end(), e);
 }
 
+
+std::string Simulation::getPopInfo() {
+	std::string popInfo = "";
+	std::vector<Pop*>::iterator popIt;
+	for (auto popIt = people.begin(); popIt != people.end(); ++popIt) {
+		Pop* currentPop = (*popIt);
+		popInfo += currentPop->getPopID() + "," + currentPop->getPopCaste() + "," + std::to_string(currentPop->getMoney()) + "," + std::to_string(currentPop->checkNeeds()) + "\n";
+	}
+	return popInfo;
+}
+
 //This is the main function of the simulation. It advances the simulation one "tick" which is an abritrary unit of time, and the smallest.
 //All the Pops wun through their tasks, sell/buy goods, take care of needs, etc.
 

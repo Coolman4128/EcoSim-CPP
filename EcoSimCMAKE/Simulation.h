@@ -40,5 +40,5 @@ public:
 	double getGoodDemand(std::string good);
 	void findSupplyDemand();
 	void printNeedlessPops();
-
+	std::string getPopInfo();
 };
